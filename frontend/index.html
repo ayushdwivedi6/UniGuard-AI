@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UniGuard AI | Cyber Threat Detection</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️
+            <span>UniGuard <b>AI</b></span>
+        </div>
+
+        <nav>
+
+            <button class="nav-item active" data-section="dashboard">
+                <span>▦</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" data-section="traffic">
+                <span>⌁</span>
+                Traffic Analysis
+            </button>
+
+            <button class="nav-item" data-section="threats">
+                <span>⚠</span>
+                Threats
+            </button>
+
+            <button class="nav-item" data-section="system">
+                <span>⚙</span>
+                System
+            </button>
+
+        </nav>
+
+        <div class="system-status">
+
+            <div class="status-dot"></div>
+
+            <div>
+                <strong>System Online</strong>
+                <small>AI Engine Active</small>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div>
+                <h1>Security Dashboard</h1>
+                <p>AI-powered network threat detection</p>
+            </div>
+
+            <div class="live-status">
+                <span></span>
+                LIVE SYSTEM
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboard" class="section active">
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">⌁</div>
+
+                    <div>
+                        <span>Total Flows</span>
+                        <strong id="totalFlows">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">✓</div>
+
+                    <div>
+                        <span>Benign Traffic</span>
+                        <strong id="benignFlows">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card danger-card">
+
+                    <div class="stat-icon red">!</div>
+
+                    <div>
+                        <span>Threats Detected</span>
+                        <strong id="threatFlows">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card warning-card">
+
+                    <div class="stat-icon yellow">⚠</div>
+
+                    <div>
+                        <span>Threat Rate</span>
+                        <strong id="threatRate">0%</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- UPLOAD -->
+
+            <div class="panel upload-panel">
+
+                <div class="panel-title">
+
+                    <div>
+                        <h2>Analyze Network Traffic</h2>
+
+                        <p>
+                            Upload a network-flow CSV file for AI-powered
+                            cyber threat detection.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="upload-area">
+
+                    <label for="csvFile" class="file-label">
+
+                        <span class="upload-icon">📁</span>
+
+                        <div>
+                            <strong id="fileName">
+                                Choose Network Traffic CSV
+                            </strong>
+
+                            <small>
+                                Click to browse files
+                            </small>
+                        </div>
+
+                    </label>
+
+                    <input
+                        type="file"
+                        id="csvFile"
+                        accept=".csv"
+                        hidden
+                    >
+
+                    <button id="analyzeBtn" class="analyze-btn">
+                        🔍 Analyze Traffic
+                    </button>
+
+                </div>
+
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <span>AI engine analyzing network traffic...</span>
+                </div>
+
+                <div id="errorMessage" class="error hidden"></div>
+
+            </div>
+
+
+            <!-- CHART + RESULT -->
+
+            <div class="two-column">
+
+                <div class="panel chart-panel">
+
+                    <div class="panel-title">
+
+                        <div>
+                            <h2>Threat Distribution</h2>
+                            <p>AI classification results</p>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="threatChart"></canvas>
+                    </div>
+
+                    <div class="legend">
+
+                        <div>
+                            <span class="legend-dot benign"></span>
+                            BENIGN
+                        </div>
+
+                        <div>
+                            <span class="legend-dot ddos"></span>
+                            DDoS
+                        </div>
+
+                        <div>
+                            <span class="legend-dot portscan"></span>
+                            PortScan
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LATEST RESULT -->
+
+                <div class="panel latest-panel">
+
+                    <h2>Latest Analysis</h2>
+
+                    <div id="emptyResult" class="empty-result">
+
+                        <div class="empty-icon">🛡️</div>
+
+                        <h3>Waiting for analysis</h3>
+
+                        <p>
+                            Upload a CSV file to begin AI threat detection.
+                        </p>
+
+                    </div>
+
+
+                    <div id="analysisResult" class="analysis-result hidden">
+
+                        <div class="result-icon">
+                            🚨
+                        </div>
+
+                        <h3 id="resultTitle">
+                            Threats Detected
+                        </h3>
+
+                        <div class="big-number" id="resultThreats">
+                            0
+                        </div>
+
+                        <p>
+                            potentially suspicious flows detected
+                        </p>
+
+
+                        <div class="result-grid">
+
+                            <div>
+                                <span>Risk Score</span>
+                                <strong id="riskScore">0/100</strong>
+                            </div>
+
+                            <div>
+                                <span>Severity</span>
+                                <strong id="severity">LOW</strong>
+                            </div>
+
+                            <div>
+                                <span>AI Confidence</span>
+                                <strong id="confidence">0%</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- THREAT ANALYSIS -->
+
+            <div class="panel threat-analysis">
+
+                <div class="panel-title">
+
+                    <div>
+                        <h2>Threat Analysis</h2>
+                        <p>Detected threat categories</p>
+                    </div>
+
+                </div>
+                <!-- ================= AI INVESTIGATION ================= -->
+
+<div class="panel investigation-panel">
+
+    <div class="panel-title">
+
+        <div>
+            <h2>🔍 AI Threat Investigation</h2>
+
+            <p>
+                Detailed analysis generated by the UniGuard AI engine.
+            </p>
+        </div>
+
+        <div class="investigation-status">
+            AI ANALYSIS
+        </div>
+
+    </div>
+
+
+    <div class="investigation-grid">
+
+        <!-- DDoS -->
+
+        <div class="investigation-card ddos-investigation">
+
+            <div class="investigation-icon">
+                🔴
+            </div>
+
+            <div>
+                <span>DDoS Attacks</span>
+
+                <strong id="investigationDdos">
+                    0
+                </strong>
+
+                <small id="investigationDdosPercent">
+                    0% of traffic
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- PortScan -->
+
+        <div class="investigation-card port-investigation">
+
+            <div class="investigation-icon">
+                🟠
+            </div>
+
+            <div>
+                <span>Port Scans</span>
+
+                <strong id="investigationPort">
+                    0
+                </strong>
+
+                <small id="investigationPortPercent">
+                    0% of traffic
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- Benign -->
+
+        <div class="investigation-card benign-investigation">
+
+            <div class="investigation-icon">
+                🟢
+            </div>
+
+            <div>
+                <span>Benign Flows</span>
+
+                <strong id="investigationBenign">
+                    0
+                </strong>
+
+                <small id="investigationBenignPercent">
+                    0% of traffic
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODEL DETAILS -->
+
+    <div class="model-details">
+
+        <div class="model-detail">
+
+            <span>AI MODEL</span>
+
+            <strong>Random Forest</strong>
+
+        </div>
+
+
+        <div class="model-detail">
+
+            <span>ANALYSIS TYPE</span>
+
+            <strong>Network Flow</strong>
+
+        </div>
+
+
+        <div class="model-detail">
+
+            <span>DETECTION CLASSES</span>
+
+            <strong>3 Classes</strong>
+
+        </div>
+
+
+        <div class="model-detail">
+
+            <span>AI CONFIDENCE</span>
+
+            <strong id="investigationConfidence">
+                0%
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- SECURITY MESSAGE -->
+
+    <div class="security-message">
+
+        <span>⚠️</span>
+
+        <p>
+            Detection results represent predictions generated by the
+            machine-learning classifier. Suspicious activity should be
+            validated before taking security action.
+        </p>
+
+    </div>
+
+</div>
+
+
+                <div class="threat-cards">
+
+                    <div class="threat-card ddos-card">
+
+                        <div class="threat-symbol">
+                            🔴
+                        </div>
+
+                        <div>
+                            <span>DDoS Attacks</span>
+                            <strong id="ddosCount">0</strong>
+                        </div>
+
+                        <small>
+                            Distributed denial-of-service patterns
+                        </small>
+
+                    </div>
+
+
+                    <div class="threat-card port-card">
+
+                        <div class="threat-symbol">
+                            🟠
+                        </div>
+
+                        <div>
+                            <span>Port Scans</span>
+                            <strong id="portscanCount">0</strong>
+                        </div>
+
+                        <small>
+                            Suspicious port scanning activity
+                        </small>
+
+                    </div>
+
+
+                    <div class="threat-card benign-card">
+
+                        <div class="threat-symbol">
+                            🟢
+                        </div>
+
+                        <div>
+                            <span>Benign Flows</span>
+                            <strong id="benignCount">0</strong>
+                        </div>
+
+                        <small>
+                            Traffic classified as normal
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TRAFFIC SECTION ================= -->
+
+        <section id="traffic" class="section">
+
+            <div class="page-heading">
+
+                <h2>Traffic Analysis</h2>
+
+                <p>
+                    Analyze network-flow data using the UniGuard AI
+                    classification engine.
+                </p>
+
+            </div>
+
+
+            <div class="panel information-panel">
+
+                <div class="info-icon">📡</div>
+
+                <div>
+                    <h2>Network Flow Analysis</h2>
+
+                    <p>
+                        UniGuard AI processes numerical network-flow
+                        features and classifies traffic into three
+                        categories: BENIGN, DDoS and PortScan.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="analysis-steps">
+
+                <div>
+                    <span>01</span>
+                    <strong>Upload</strong>
+                    <p>Provide network-flow CSV data.</p>
+                </div>
+
+                <div>
+                    <span>02</span>
+                    <strong>Process</strong>
+                    <p>Clean and prepare network features.</p>
+                </div>
+
+                <div>
+                    <span>03</span>
+                    <strong>Detect</strong>
+                    <p>Random Forest classifies traffic.</p>
+                </div>
+
+                <div>
+                    <span>04</span>
+                    <strong>Assess</strong>
+                    <p>Risk and severity are calculated.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= THREATS ================= -->
+
+        <section id="threats" class="section">
+
+            <div class="page-heading">
+
+                <h2>Threat Intelligence</h2>
+
+                <p>
+                    Overview of threats detected during the latest analysis.
+                </p>
+
+            </div>
+
+
+            <div class="threat-overview">
+
+                <div class="panel threat-big-card">
+
+                    <span>Total Suspicious Flows</span>
+
+                    <strong id="threatOverview">
+                        0
+                    </strong>
+
+                    <small>
+                        Flagged by the AI classifier
+                    </small>
+
+                </div>
+
+
+                <div class="panel threat-big-card">
+
+                    <span>DDoS Detection</span>
+
+                    <strong id="ddosOverview">
+                        0
+                    </strong>
+
+                    <small>
+                        Potential flooding activity
+                    </small>
+
+                </div>
+
+
+                <div class="panel threat-big-card">
+
+                    <span>PortScan Detection</span>
+
+                    <strong id="portOverview">
+                        0
+                    </strong>
+
+                    <small>
+                        Potential reconnaissance activity
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2>Security Notice</h2>
+
+                <p class="notice-text">
+
+                    Detection results represent predictions generated by
+                    the trained machine-learning classifier. Results should
+                    be treated as potentially suspicious activity and
+                    validated before taking security action.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SYSTEM ================= -->
+
+        <section id="system" class="section">
+
+            <div class="page-heading">
+
+                <h2>System Information</h2>
+
+                <p>
+                    UniGuard AI detection engine status and architecture.
+                </p>
+
+            </div>
+
+
+            <div class="system-grid">
+
+                <div class="panel system-card">
+
+                    <span class="system-label">AI MODEL</span>
+
+                    <h2>Random Forest</h2>
+
+                    <p>
+                        Ensemble machine-learning classifier trained on
+                        network-flow traffic data.
+                    </p>
+
+                    <div class="online">
+                        <span></span>
+                        Model Loaded
+                    </div>
+
+                </div>
+
+
+                <div class="panel system-card">
+
+                    <span class="system-label">BACKEND</span>
+
+                    <h2>FastAPI</h2>
+
+                    <p>
+                        Python API responsible for data processing and
+                        model inference.
+                    </p>
+
+                    <div class="online">
+                        <span></span>
+                        API Connected
+                    </div>
+
+                </div>
+
+
+                <div class="panel system-card">
+
+                    <span class="system-label">DETECTION CLASSES</span>
+
+                    <h2>3 Categories</h2>
+
+                    <p>
+                        BENIGN, DDoS and PortScan traffic classification.
+                    </p>
+
+                    <div class="class-list">
+                        <span>BENIGN</span>
+                        <span>DDoS</span>
+                        <span>PortScan</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            UniGuard AI • AI-Based Cyber Threat Detection System
+        </footer>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
